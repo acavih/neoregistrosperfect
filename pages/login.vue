@@ -1,15 +1,34 @@
 <template>
   <v-container>
-    <login-form @doLogin="login" />
+    <template v-if="!$auth.loggedIn">
+      <login-form @doLogin="login" />
+    </template>
+    <template v-else>
+      <v-card>
+        <v-card-title>Ya has accedido</v-card-title>
+        <v-card-text>
+          <v-btn elevation="0" to="/profile">
+            Ir a la pagina de perfil
+          </v-btn>
+        </v-card-text>
+      </v-card>
+    </template>
   </v-container>
 </template>
 
 <script>
 import LoginForm from '@/components/auth/login.vue'
 export default {
-  components: {LoginForm},
+  name: 'LoginPage',
+  components: { LoginForm },
   layout: 'guestlayout',
   auth: false,
+  computed: {
+    isLogged () {
+      console.log('AUTH', this.$auth)
+      return this.$auth.loggedIn
+    }
+  },
   async mounted () {
     console.log(this.$auth.$state.user)
     await this.$auth.logout()
@@ -18,7 +37,8 @@ export default {
     async login (loginData) {
       console.log('Haciendo login', loginData)
       try {
-        const response = await this.$auth.loginWith('local', {data: loginData})
+        const response = await this.$auth.loginWith('local', { data: loginData })
+        this.$router.push('/profile')
         console.log(response)
       } catch (error) {
         console.log(error)

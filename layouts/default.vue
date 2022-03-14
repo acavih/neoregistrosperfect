@@ -4,14 +4,16 @@
       <v-toolbar-title>Registros</v-toolbar-title>
       <v-spacer />
       <v-menu v-model="menu" :close-on-content-click="false" :nudge-width="200" offset-y>
-        <template v-slot:activator="{ on, attrs }">
+        <template #activator="{ on, attrs }">
           <v-btn
             color="primary"
             elevation="0"
             dark
             v-bind="attrs"
             v-on="on"
-          >Menu de usuario</v-btn>
+          >
+            Menu de usuario
+          </v-btn>
         </template>
 
         <v-card>
@@ -29,9 +31,11 @@
           -->
 
           <v-card-actions>
-            <v-spacer></v-spacer>
+            <v-spacer />
 
-            <v-btn color="error" text @click="logout">Logout</v-btn>
+            <v-btn color="error" text @click="logout">
+              Logout
+            </v-btn>
           </v-card-actions>
         </v-card>
       </v-menu>
@@ -44,17 +48,20 @@
 
 <script>
 export default {
-  data() {
-    return {}
+  data () {
+    return {
+      menu: false
+    }
   },
   computed: {
-    user() {
+    user () {
       return this.$auth.$state.user
     }
   },
   methods: {
     async logout () {
       await this.$auth.logout()
+      this.$router.push('/login')
     }
   }
 }

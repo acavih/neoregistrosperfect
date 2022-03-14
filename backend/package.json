@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "ts-node src/server.ts"
+    "dev": "nodemon"
   },
   "keywords": [],
   "author": "",
@@ -31,6 +31,7 @@
     "@types/faker": "^6.6.9",
     "@types/supertest": "^2.0.11",
     "dotenv": "^16.0.0",
+    "nodemon": "^2.0.15",
     "ts-node": "^10.7.0"
   }
 }
