@@ -17,4 +17,19 @@ router.get('/', async (req, res) => {
   }
 })
 
+router.post('/', async (req, res) => {
+  console.log(req.body)
+  const attention = new Attention({
+    ...req.body,
+    partner: req.query.partner
+  })
+  await attention.save()
+  res.json({ message: 'Atención creada', payload: attention })
+})
+
+router.put('/:attention', async (req, res) => {
+  const attention = await Attention.findByIdAndUpdate(req.params.attention, req.body)
+  res.json({ message: 'Atencion actualizada', payload: attention })
+})
+
 export default router

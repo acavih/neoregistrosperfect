@@ -12,6 +12,10 @@ export default {
     attention: {
       type: Object,
       default: () => ({})
+    },
+    editingAttention: {
+      type: Boolean,
+      default: false
     }
   },
   data () {
@@ -32,11 +36,67 @@ export default {
   computed: {
     editing () {
       return this.attention._id !== undefined
+    },
+    attentionPayload () {
+      const keysResources = [
+        'attentionReasons',
+        'attentionsTypes',
+        'derivedFrom',
+        'derivedTo',
+        'formation',
+        'projects',
+        'volunteer'
+        // 'placeAttention'
+      ]
+      const payload = { ...this.attentionData }
+      keysResources.forEach((key) => {
+        if (payload[key] !== undefined) {
+          payload[key] = payload[key].map((item) => {
+            console.log(item)
+            return typeof payload[key] !== 'string' ? item : item._id
+          })
+        }
+      })
+      payload.placeAttention = typeof payload.placeAttention === 'string' ? payload.placeAttention : payload.placeAttention._id
+      return payload
     }
   },
   methods: {
     submitData () {
-      this.$emit('close')
+      let result = false
+      if (this.editingAttention) {
+        result = this.updateAttention()
+      } else {
+        result = this.createAttention()
+      }
+      if (result) {
+        this.$emit('update')
+        this.$emit('close')
+      }
+    },
+    async updateAttention () {
+      try {
+        const response = await this.$axios.put('/api/attentions/' + this.attention._id, this.attentionPayload)
+        console.log('response', response)
+        return true
+      } catch (error) {
+        console.log('error', error)
+        this.$dialog.notify.success('Error al actualizar la atención ' + error.message)
+        return false
+      }
+    },
+    createAttention () {
+      try {
+        const response = this.$axios.post('/api/attentions', this.attentionPayload, {
+          params: { partner: this.$route.params.partner }
+        })
+        console.log('response', response)
+        return true
+      } catch (error) {
+        console.log('error', error)
+        this.$dialog.notify.success('Error al crear la atención ' + error.message)
+        return false
+      }
     }
   }
 }

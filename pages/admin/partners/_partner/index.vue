@@ -3,9 +3,10 @@ import { format } from 'date-fns'
 import { mapState, mapGetters } from 'vuex'
 import AttentionCard from '@/components/attentions/AttentionCard.vue'
 import CreateMember from '@/components/partners/CreatePartner.vue'
+import AttentionEditor from '@/components/attentions/AttentionEditor.vue'
 
 export default {
-  components: { AttentionCard, CreateMember },
+  components: { AttentionCard, CreateMember, AttentionEditor },
   filters: {
     date (value) {
       return format(new Date(value), 'P')
@@ -22,7 +23,8 @@ export default {
   },
   data () {
     return {
-      editingMember: false
+      editingMember: false,
+      creatingAttention: false
     }
   },
   computed: {
@@ -34,6 +36,16 @@ export default {
       edad: 'partners/edad',
       formattedDate: 'partners/formattedDate'
     })
+  },
+  methods: {
+    async updateData () {
+      console.log('actualizando atenciones')
+      const partnerId = this.$route.params.partner
+      await Promise.all([
+        await this.$store.dispatch('partners/fetchPartner', partnerId),
+        await this.$store.dispatch('attentions/fetchAttentions', partnerId)
+      ])
+    }
   }
 }
 </script>
@@ -121,7 +133,13 @@ export default {
         </v-card-text>
       </v-card>
       <v-card class="mt-5" elevation="0">
-        <v-card-title>Listado de atenciones</v-card-title>
+        <v-card-title>
+          Listado de atenciones
+          <v-spacer />
+          <v-btn color="primary" elevation="0" @click="creatingAttention = true">
+            Nueva atención
+          </v-btn>
+        </v-card-title>
         <v-card-text>
           <v-timeline align-top dense>
             <v-timeline-item v-for="attentionsList in attentions" :key="attentionsList.data" small>
@@ -132,7 +150,7 @@ export default {
                   </v-toolbar>
                 </v-card-title>
                 <v-card-text>
-                  <attention-card v-for="attention in attentionsList.items" :key="attention._id" :partner-name="data.name + ' ' + data.surname + '(' + data.code + ')'" :attention="attention" />
+                  <attention-card v-for="attention in attentionsList.items" :key="attention._id" :partner-name="data.name + ' ' + data.surname + '(' + data.code + ')'" :attention="attention" @update="updateData" />
                 </v-card-text>
               </v-card>
             </v-timeline-item>
@@ -140,5 +158,8 @@ export default {
         </v-card-text>
       </v-card>
     </v-container>
+    <v-dialog v-model="creatingAttention" fullscreen>
+      <attention-editor :partner-name="data.name + ' ' + data.surname" @update="updateData" @close="creatingAttention = false" />
+    </v-dialog>
   </v-sheet>
 </template>

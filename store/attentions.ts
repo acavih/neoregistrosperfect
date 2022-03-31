@@ -23,7 +23,7 @@ export const getters = {
       if (existing) {
         existing.items.push(value)
       } else {
-        acc.push({ date: value.dateAttention, items: [value] })
+        acc.push({ date: formattedDateAttention, items: [value] })
       }
       return acc
     }, [])

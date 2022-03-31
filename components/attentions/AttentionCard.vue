@@ -29,7 +29,11 @@ export default {
     }
   },
   methods: {
-    editAttention () {},
+    editAttention () {
+      this.editing = true
+      this.attentionEdit = { ...this.attention }
+      this.$router.push({ params: { attention: this.attentionEdit._id } })
+    },
     showEditModal () {
       this.editing = true
     },
@@ -44,7 +48,7 @@ export default {
   <v-card outlined class="mb-4">
     <v-card-title>
       <v-spacer />
-      <v-btn icon @click="editing = true">
+      <v-btn icon @click="editAttention">
         <v-icon>
           mdi-pencil
         </v-icon>
@@ -69,7 +73,7 @@ export default {
       </v-alert>
 
       <v-dialog v-model="editing" fullscreen>
-        <attention-editor :attention="attentionData" :partner-name="partnerName" @close="editing = false" />
+        <attention-editor :editing-attention="true" :attention="attentionData" :partner-name="partnerName" @update="$emit('update')" @close="editing = false" />
       </v-dialog>
     </v-card-text>
     <v-card />
