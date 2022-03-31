@@ -27,12 +27,14 @@
       "@nuxt/types",
       "@nuxtjs/axios",
       "@nuxtjs/auth-next",
-      "@types/node"
+      "@types/node",
+      "vuetify-dialog/nuxt"
     ]
   },
   "exclude": [
     "node_modules",
     ".nuxt",
-    "dist"
+    "dist",
+    "backend"
   ]
 }

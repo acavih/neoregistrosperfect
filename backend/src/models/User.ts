@@ -17,3 +17,11 @@ UserSchema.pre('save', async function cryptPassword () {
 const userModel = mongoose.model('users', UserSchema)
 
 export default userModel
+
+export async function createUserIfNotExists (username: string, password: string, name: string, surname: string) {
+  const user = await userModel.findOne({ email: username })
+  if (!user) {
+    console.log('creando usuario %s', username)
+    await userModel.create({ email: username, password, name, surname })
+  }
+}

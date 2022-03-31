@@ -1,12 +1,13 @@
 <template>
-  <v-app>
+  <v-app class="app">
     <v-app-bar app>
+      <v-app-bar-nav-icon @click="showDrawer = !showDrawer" />
       <v-toolbar-title>Registros</v-toolbar-title>
       <v-spacer />
       <v-menu v-model="menu" :close-on-content-click="false" :nudge-width="200" offset-y>
         <template #activator="{ on, attrs }">
           <v-btn
-            color="primary"
+            color="secondary"
             elevation="0"
             dark
             v-bind="attrs"
@@ -40,6 +41,29 @@
         </v-card>
       </v-menu>
     </v-app-bar>
+    <v-navigation-drawer v-model="showDrawer" app>
+      <v-list class="grey elevation-4">
+        <v-list-item>
+          <v-list-item-content>
+            <v-list-item-title class="font-weight-bold white--text">
+              Registros
+            </v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+      </v-list>
+      <v-list>
+        <v-list-item to="/admin/partners">
+          <v-list-item-content>
+            <v-list-item-title>Socios</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+        <v-list-item to="/admin/resources">
+          <v-list-item-content>
+            <v-list-item-title>Recursos</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+      </v-list>
+    </v-navigation-drawer>
     <v-main>
       <nuxt />
     </v-main>
@@ -50,7 +74,8 @@
 export default {
   data () {
     return {
-      menu: false
+      menu: false,
+      showDrawer: true
     }
   },
   computed: {
@@ -66,3 +91,13 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+@import '~vuetify/src/styles/styles.sass';
+
+$bodyBG: map-get($map: $red, $key: 'lighten-2');
+
+.app {
+  background-color: $bodyBG;
+}
+</style>

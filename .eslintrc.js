@@ -12,6 +12,8 @@ module.exports = {
   ],
   // add your custom rules here
   rules: {
-    'no-console': ['off']
+    'no-console': ['off'],
+    'vue/multi-word-component-names': ['off'],
+    'import/no-named-as-default': ['off']
   }
 }
