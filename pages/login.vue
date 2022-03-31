@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <template v-if="!$auth.loggedIn">
-      <login-form @doLogin="login" />
+      <login-form :message="message" @doLogin="login" />
     </template>
     <template v-else>
       <v-card>
@@ -23,6 +23,11 @@ export default {
   components: { LoginForm },
   layout: 'guestlayout',
   auth: false,
+  data () {
+    return {
+      message: ''
+    }
+  },
   computed: {
     isLogged () {
       console.log('AUTH', this.$auth)
@@ -41,7 +46,14 @@ export default {
         this.$router.push('/profile')
         console.log(response)
       } catch (error) {
-        console.log(error)
+        console.dir(error)
+        if (error.isAxiosError) {
+          this.$dialog.notify.error(error.response.data.message)
+          this.message = error.response.data.message
+        } else {
+          this.$dialog.notify.error(error.response.data.message)
+          this.message = error.message
+        }
         console.log('un error sucedio')
       }
     }

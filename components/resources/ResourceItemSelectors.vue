@@ -9,16 +9,16 @@ export default {
       type: String,
       required: true
     },
-    initialValue: {
-      type: Object,
-      default: () => ({}),
-      required: false
+    initialValues: {
+      required: false,
+      type: Array,
+      default: () => ([])
     }
   },
   data () {
     return {
       resourceItems: [],
-      selectedItem: { ...this.initialValue },
+      selectedItems: [...this.initialValues],
       userQuery: '',
       itemText: 'name',
       loading: false
@@ -29,9 +29,11 @@ export default {
       return {
         items: this.resourceItems,
         itemText: this.itemText,
+        multiple: true,
         label: this.labelResource,
         itemValue: '_id',
         returnObject: false,
+        chips: true,
         loading: this.loading,
         disabled: this.loading,
         clearable: true
@@ -39,17 +41,14 @@ export default {
     }
   },
   watch: {
-    selectedItem () {
-      this.$emit('input', this.selectedItem)
-    },
     selectedItems () {
       this.$emit('input', this.selectedItems)
     }
   },
   async mounted () {
     await this.retrieveAll()
-    this.selectedItem = { ...this.initialValue }
-    this.$emit('input', this.selectedItem)
+    this.selectedItems = [...this.initialValues]
+    this.$emit('input', this.selectedItems)
   },
   methods: {
     async retrieveAll () {
@@ -88,12 +87,12 @@ export default {
 <template>
   <v-autocomplete
     v-bind="autocompleteAttrs"
-    v-model="selectedItem"
+    v-model="selectedItems"
     :search-input.sync="userQuery"
     @keydown="handleQuery"
   >
     <template #prepend>
-      <v-btn :disabled="loading" icon @click="retrieveAll">
+      <v-btn icon :disabled="loading" @click="retrieveAll">
         <v-icon>mdi-refresh</v-icon>
       </v-btn>
     </template>

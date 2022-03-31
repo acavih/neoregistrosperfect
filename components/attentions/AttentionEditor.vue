@@ -1,8 +1,9 @@
 <script>
 import VuetifyDatePicker from '../VuetifyDatePicker.vue'
+import ResourceInputSelectors from '../resources/ResourceItemSelectors.vue'
 import ResourceInputSelector from '../resources/ResourceItemSelector.vue'
 export default {
-  components: { VuetifyDatePicker, ResourceInputSelector },
+  components: { VuetifyDatePicker, ResourceInputSelectors, ResourceInputSelector },
   props: {
     partnerName: {
       type: String,
@@ -22,7 +23,7 @@ export default {
         { multiple: true, columns: 6, attentionKey: 'derivedFrom', key: 'derivaciones', text: 'Derivado de' },
         { multiple: true, columns: 6, attentionKey: 'attentionsTypes', key: 'tipoatenciones', text: 'Tipos de atención' },
         { multiple: true, columns: 4, attentionKey: 'formation', key: 'formacions', text: 'Formación' },
-        { multiple: true, columns: 4, attentionKey: 'projects', key: 'proyctos', text: 'Proyectos' },
+        { multiple: true, columns: 4, attentionKey: 'projects', key: 'proyectos', text: 'Proyectos' },
         { multiple: true, columns: 4, attentionKey: 'volunteer', key: 'volunteer', text: 'Voluntariado' },
         { multiple: false, columns: 12, attentionKey: 'placeAttention', key: 'lugaratencions', text: 'Lugar de atencion' }
       ]
@@ -59,7 +60,8 @@ export default {
         <vuetify-date-picker v-model="attentionData.dateAttention" :label="'Fecha de la atencion'" />
         <v-row>
           <v-col v-for="key in keys" :key="key.text" :md="key.columns">
-            <resource-input-selector v-model="attentionData[key.attentionKey]" :initial-values="attentionData[key.attentionKey]" :multiple-selections="key.multipleSelections" :label-resource="key.text" :type-resource="key.key" />
+            <resource-input-selectors v-if="key.multiple" v-model="attentionData[key.attentionKey]" :initial-values="attentionData[key.attentionKey]" :label-resource="key.text" :type-resource="key.key" />
+            <resource-input-selector v-else v-model="attentionData[key.attentionKey]" :initial-value="attentionData[key.attentionKey]" :label-resource="key.text" :type-resource="key.key" />
           </v-col>
         </v-row>
         <v-textarea v-model="attentionData.comment" label="Comentario de la atencion" />
