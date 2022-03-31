@@ -85,7 +85,7 @@ export default {
                   </v-list-item-title>
                 </v-list-item-content>
               </v-list-item>
-              <v-list-item v-for="type in typeResources" :key="type" :active="$route.query.type === type" @click="goToType(type)">
+              <v-list-item v-for="type in typeResources" :key="type" :class="$route.query.type === type ? 'grey darken-2' : ''" :dark="$route.query.type === type" @click="goToType(type)">
                 <v-list-item-content>
                   <v-list-item-title>{{ type }}</v-list-item-title>
                 </v-list-item-content>
