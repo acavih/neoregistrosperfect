@@ -28,6 +28,11 @@ export default {
       message: ''
     }
   },
+  head () {
+    return {
+      title: 'Iniciar sesión'
+    }
+  },
   computed: {
     isLogged () {
       console.log('AUTH', this.$auth)

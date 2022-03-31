@@ -27,6 +27,11 @@ export default {
       creatingAttention: false
     }
   },
+  head () {
+    return {
+      title: 'Atenciones de ' + this.data.name + ' ' + this.data.surname
+    }
+  },
   computed: {
     ...mapState({
       data: state => state.partners.item

@@ -11,6 +11,11 @@ export default {
       creatingMember: false
     }
   },
+  head () {
+    return {
+      title: 'Listado de socios'
+    }
+  },
   computed: {
     ...mapState({
       data: state => state.partners.items,

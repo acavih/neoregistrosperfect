@@ -26,6 +26,10 @@ export default {
     await this.retrieveAll()
   },
   methods: {
+    goToType (type) {
+      this.$router.push('/admin/resources?type=' + type)
+      this.$emit('input', 'Viendo recursos de tipo ' + type)
+    },
     async retrieveAll () {
       const basePath = '/api/resources/'
       const typeResource = this.$route.query.type || ''
@@ -81,7 +85,7 @@ export default {
                   </v-list-item-title>
                 </v-list-item-content>
               </v-list-item>
-              <v-list-item v-for="type in typeResources" :key="type" :active="$route.query.type === type" @click="$router.push('/admin/resources?type=' + type)">
+              <v-list-item v-for="type in typeResources" :key="type" :active="$route.query.type === type" @click="goToType(type)">
                 <v-list-item-content>
                   <v-list-item-title>{{ type }}</v-list-item-title>
                 </v-list-item-content>
