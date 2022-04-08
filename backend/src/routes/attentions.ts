@@ -27,8 +27,15 @@ router.post('/', async (req, res) => {
   res.json({ message: 'Atención creada', payload: attention })
 })
 
+router.get('/:id', async (req, res) => {
+  const attention = await Attention.findById(req.params.id)
+  res.json({ message: 'Atención encontrada', payload: attention })
+})
+
 router.put('/:attention', async (req, res) => {
-  const attention = await Attention.findByIdAndUpdate(req.params.attention, req.body)
+  const populate = (req.query.populate ?? '').toString()
+  console.log(populate)
+  const attention = await Attention.findByIdAndUpdate(req.params.attention, req.body).populate(populate)
   res.json({ message: 'Atencion actualizada', payload: attention })
 })
 

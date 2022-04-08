@@ -1,5 +1,6 @@
 import { Router } from 'express'
 import Partner from '../models/Partner'
+import { DEFAULT_NATIONALITY, DEFAULT_PARTNER, DEFAULT_RESIDENCY, DEFAULT_SEX } from '../vars'
 
 export const partnerRouter = Router()
 
@@ -25,7 +26,13 @@ partnerRouter.get('/', async (req, res) => {
   })
 })
 
-partnerRouter.post('/', async (req, res) => {
+partnerRouter.post('/', (req, _res, next) => {
+  if (req.body.sex === {}) { req.body.sex = DEFAULT_SEX }
+  if (req.body.nationality === {}) { req.body.sex = DEFAULT_NATIONALITY }
+  if (req.body.partner === {}) { req.body.sex = DEFAULT_PARTNER }
+  if (req.body.residency === {}) { req.body.sex = DEFAULT_RESIDENCY }
+  next()
+}, async (req, res) => {
   console.log(req.body)
   const partner = await Partner.create(req.body)
   res.json({ message: 'El miembro se introdujo con éxito', payload: partner })
